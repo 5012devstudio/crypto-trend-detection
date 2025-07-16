@@ -1,6 +1,6 @@
-# crypto-trend-detection
+## 1. System Context Diagram
 
-%% System Context Diagram
+```mermaid
 graph TB
     subgraph "External Systems"
         CG[CoinGecko API]
@@ -61,7 +61,6 @@ graph TB
         DEPLOY[CI/CD Pipeline]
     end
 
-    %% Data Flow
     CG --> N8N
     SM --> N8N
     BC --> N8N
@@ -69,7 +68,6 @@ graph TB
     N8N --> QUEUE
     QUEUE --> ORCHESTRATOR
     
-    %% Agent Interactions
     ORCHESTRATOR --> MDA
     ORCHESTRATOR --> SSA
     ORCHESTRATOR --> PRA
@@ -81,20 +79,17 @@ graph TB
     ORCHESTRATOR --> TPA
     ORCHESTRATOR --> FFA
     
-    %% Agent Data Storage
     MDA --> DB
     SSA --> DB
     PRA --> DB
     OCA --> DB
     NPA --> DB
     
-    %% Processing Flow
     ORCHESTRATOR --> TREND
     TREND --> ALERT
     ALERT --> WEBSOCKET
     ALERT --> EMAIL
     
-    %% Client Interactions
     WEB --> API
     MOBILE --> API
     API_CLIENTS --> API
@@ -102,38 +97,30 @@ graph TB
     API --> DB
     API --> REDIS
     
-    %% Feedback Loop
     WEB --> FEEDBACK
     MOBILE --> FEEDBACK
     FEEDBACK --> FFA
     FFA --> MLA
     
-    %% Infrastructure
     WEB --> CDN
     MOBILE --> CDN
     API --> MONITOR
     DB --> BACKUP
     
-    %% Payment
     WEB --> PAYMENT
     MOBILE --> PAYMENT
     PAYMENT --> API
 
-    style ORCHESTRATOR fill:#ff6b6b
-    style MDA fill:#4ecdc4
-    style SSA fill:#4ecdc4
-    style PRA fill:#4ecdc4
-    style OCA fill:#4ecdc4
-    style NPA fill:#4ecdc4
-    style ALA fill:#4ecdc4
-    style RLA fill:#4ecdc4
-    style MLA fill:#4ecdc4
-    style TPA fill:#4ecdc4
-    style FFA fill:#4ecdc4
+    classDef orchestrator fill:#ff6b6b
+    classDef agent fill:#4ecdc4
+    
+    class ORCHESTRATOR orchestrator
+    class MDA,SSA,PRA,OCA,NPA,ALA,RLA,MLA,TPA,FFA agent
+```
 
----
+## 2. Entity Relationship Diagram
 
-%% Entity Relationship Diagram
+```mermaid
 erDiagram
     USERS {
         uuid id PK
@@ -279,10 +266,11 @@ erDiagram
     CRYPTOCURRENCIES ||--o{ TREND_CRYPTO_ASSOCIATIONS : part_of
     TRENDS ||--o{ ALERTS : generates
     ALERTS ||--o{ USER_FEEDBACK : receives
+```
 
----
+## 3. Workflow / Business Process Model
 
-%% Workflow / Business Process Model
+```mermaid
 graph TD
     START([System Start]) --> INIT[Initialize n8n Workflows]
     INIT --> PARALLEL{Parallel Data Collection}
@@ -354,21 +342,16 @@ graph TD
     PERFORMANCE_METRICS --> STORE_PATTERN
     STORE_PATTERN --> ORCHESTRATOR
     
-    style ORCHESTRATOR fill:#ff6b6b
-    style MDA fill:#4ecdc4
-    style SSA fill:#4ecdc4
-    style OCA fill:#4ecdc4
-    style NPA fill:#4ecdc4
-    style PATTERN_AGENT fill:#4ecdc4
-    style PATTERN_RECOGNITION fill:#4ecdc4
-    style RISK_ASSESSMENT fill:#4ecdc4
-    style ML_AGENT fill:#4ecdc4
-    style ALERT_LOGIC fill:#4ecdc4
-    style FEEDBACK_AGENT fill:#4ecdc4
+    classDef orchestrator fill:#ff6b6b
+    classDef agent fill:#4ecdc4
+    
+    class ORCHESTRATOR orchestrator
+    class MDA,SSA,OCA,NPA,PATTERN_AGENT,PATTERN_RECOGNITION,RISK_ASSESSMENT,ML_AGENT,ALERT_LOGIC,FEEDBACK_AGENT agent
+```
 
----
+## 4. Sequence Diagram
 
-%% Sequence Diagram
+```mermaid
 sequenceDiagram
     participant U as User
     participant API as API Gateway
@@ -449,3 +432,4 @@ sequenceDiagram
     API->>DB: Update user preferences
     DB-->>API: Confirm updated
     API-->>U: Preferences updated
+```
